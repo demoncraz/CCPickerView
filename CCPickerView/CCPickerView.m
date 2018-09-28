@@ -310,7 +310,12 @@ static const CGFloat kMinimumLineSpacing = -2.0f;
             NSString *title = [self.dataSource pickerView:self titleForRow:indexPath.item];
             cell.label.text = title;
             UIColor *selectedColor = self.selectedColor ? : [UIColor colorWithRed:33.0 / 255.0 green:150.0 / 255.0 blue:243.0 / 255.0 alpha:1.0];
-            cell.label.textColor = indexPath.item == self.selectedIndex ? selectedColor : [UIColor blackColor];
+            if (indexPath.item == self.selectedIndex) {
+                cell.label.textColor = selectedColor;
+            } else {
+                cell.label.textColor = [UIColor blackColor];
+            }
+            //            cell.label.textColor = indexPath.item == self.selectedIndex ? selectedColor : [UIColor blackColor];
             NSUInteger fontSize = self.selectedFontSize == 0 ? 25 : self.selectedFontSize;
             cell.label.font = [UIFont systemFontOfSize:fontSize];
         }
@@ -319,6 +324,15 @@ static const CGFloat kMinimumLineSpacing = -2.0f;
 }
 
 #pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView.contentOffset.y <= 0) {
+        self.selectedIndex = 0;
+    }
+    NSInteger total = [self.collectionView numberOfItemsInSection:0];
+    if (scrollView.contentOffset.y >= (kStandardItemHeight + kMinimumLineSpacing) * (total - 1)) {
+        self.selectedIndex = total - 1;
+    }
+}
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     CCPickerViewFlowLayout *layout = (CCPickerViewFlowLayout *)self.collectionView.collectionViewLayout;
@@ -335,3 +349,4 @@ static const CGFloat kMinimumLineSpacing = -2.0f;
 }
 
 @end
+

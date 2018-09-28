@@ -12,6 +12,8 @@
 @protocol CCPickerViewDataSource <NSObject>
 
 - (NSInteger)numberOfRowsInPickerView:(CCPickerView *)pickerView;
+
+@optional
 - (NSString *)pickerView:(CCPickerView *)pickerView titleForRow:(NSInteger)row;
 - (UIView *)pickerView:(CCPickerView *)pickerView viewForRow:(NSInteger)row;   //if view is provided, titleForRow will be ignored.
 
